@@ -40,6 +40,8 @@ allprojects {
         implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
 
         implementation 'com.microsoft.sqlserver:mssql-jdbc:12.8.1.jre11'
+
+        implementation 'mysql:mysql-connector-java:8.0.32'
     }
 
     tasks.withType(JavaCompile).configureEach {
