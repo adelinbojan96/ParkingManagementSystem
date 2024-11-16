@@ -9,12 +9,8 @@ import java.util.List;
 
 public interface UserService {
     void save(UserCreateDto userCreateDto);
-
     List<UserViewDto> getAllUsers();
-
     UserViewDto getByUsername(String username);
-
     List<UserViewDto> getUsersByFirstname(String firstname);
-
     void sendMail(String mail);
 }

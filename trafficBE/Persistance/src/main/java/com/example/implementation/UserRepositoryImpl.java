@@ -15,33 +15,39 @@ import java.util.Objects;
 @Repository
 public class UserRepositoryImpl implements UserRepository {
 
-    @Value(value = "${spring.datasource.url}")
+    @Value("${spring.datasource.url}")
     private String connectionString;
+
+    @Value("${spring.datasource.username}")
+    private String dbUsername;
+
+    @Value("${spring.datasource.password}")
+    private String dbPassword;
 
     @Override
     public void save(User user) {
         try (
-                Connection connection = DriverManager.getConnection(connectionString);
-                PreparedStatement preparedStatement = connection.prepareStatement("insert into users(firstname, lastname, username, password) values (?,?,?,?)")
+                Connection connection = DriverManager.getConnection(connectionString, dbUsername, dbPassword);
+                PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO user(username, password) VALUES (?, ?)")
         ) {
-            if(!Objects.equals(user.getUsername(), user.getUsername().toLowerCase()))
+            if (!user.getUsername().equals(user.getUsername().toLowerCase())) {
                 throw new InvalidValueException("Username must be lowercase");
+            }
 
-            if(getAll().stream().anyMatch(u -> Objects.equals(u.getUsername(), user.getUsername())))
+            if (getAll().stream().anyMatch(u -> u.getUsername().equals(user.getUsername()))) {
                 throw new EntityFoundException("User with username '%s' already exists".formatted(user.getUsername()));
+            }
 
-            preparedStatement.setString(1, user.getFirstname());
-            preparedStatement.setString(2, user.getLastname());
-            preparedStatement.setString(3, user.getUsername());
-            preparedStatement.setString(4, user.getPassword());
+            preparedStatement.setString(1, user.getUsername());
+            preparedStatement.setString(2, user.getPassword());
 
-            int cols = preparedStatement.executeUpdate();
-
-            if (cols == 0)
-                throw new RuntimeException("Database error");
+            int rowsAffected = preparedStatement.executeUpdate();
+            if (rowsAffected == 0) {
+                throw new RuntimeException("Failed to insert user.");
+            }
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Database error: " + e.getMessage(), e);
         }
     }
 
@@ -49,17 +55,15 @@ public class UserRepositoryImpl implements UserRepository {
     public List<User> getAll() {
         List<User> users = new ArrayList<>();
         try (
-                Connection connection = DriverManager.getConnection(connectionString);
-                PreparedStatement preparedStatement = connection.prepareStatement("select * from users")
+                Connection connection = DriverManager.getConnection(connectionString, dbUsername, dbPassword);
+                PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM user")
         ) {
             ResultSet resultSet = preparedStatement.executeQuery();
-
-            while(resultSet.next()){
+            while (resultSet.next()) {
                 users.add(toEntity(resultSet));
             }
-
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Database error: " + e.getMessage(), e);
         }
         return users;
     }
@@ -67,20 +71,17 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public User getByUsername(String username) {
         try (
-                Connection connection = DriverManager.getConnection(connectionString);
-                PreparedStatement preparedStatement = connection.prepareStatement("select * from users where username like ?")
+                Connection connection = DriverManager.getConnection(connectionString, dbUsername, dbPassword);
+                PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM user WHERE username = ?")
         ) {
             preparedStatement.setString(1, username);
-
             ResultSet resultSet = preparedStatement.executeQuery();
-
-            if(resultSet.next()){
+            if (resultSet.next()) {
                 return toEntity(resultSet);
             }
-
-            throw new RuntimeException("User with username = " + username + "not found!");
+            throw new RuntimeException("User with username = " + username + " not found!");
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Database error: " + e.getMessage(), e);
         }
     }
 
@@ -88,27 +89,22 @@ public class UserRepositoryImpl implements UserRepository {
     public List<User> getByFirstname(String firstname) {
         List<User> users = new ArrayList<>();
         try (
-                Connection connection = DriverManager.getConnection(connectionString);
-                PreparedStatement preparedStatement = connection.prepareStatement("select * from users where firstname like '%'+?+'%'")
+                Connection connection = DriverManager.getConnection(connectionString, dbUsername, dbPassword);
+                PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM user WHERE firstname LIKE ?")
         ) {
-            preparedStatement.setString(1, firstname);
+            preparedStatement.setString(1, "%" + firstname + "%");
             ResultSet resultSet = preparedStatement.executeQuery();
-
-            while(resultSet.next()){
+            while (resultSet.next()) {
                 users.add(toEntity(resultSet));
             }
-
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Database error: " + e.getMessage(), e);
         }
         return users;
     }
 
     private User toEntity(ResultSet resultSet) throws SQLException {
         User user = new User();
-        user.setUserId(resultSet.getInt("user_id"));
-        user.setFirstname(resultSet.getString("firstname"));
-        user.setLastname(resultSet.getString("lastname"));
         user.setUsername(resultSet.getString("username"));
         user.setPassword(resultSet.getString("password"));
         return user;

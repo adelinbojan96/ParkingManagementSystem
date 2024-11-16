@@ -86,7 +86,6 @@ public class UserServiceImpl implements UserService {
             String content = templateEngine.process("emailtemplate", context);
             helper.setText(content, true);
 
-            // Add inline image
             InputStream imageStream = getClass().getResourceAsStream("/Images/Authentication.png");
             if (imageStream != null) {
                 ByteArrayDataSource dataSource = new ByteArrayDataSource(imageStream, "image/png");
@@ -95,7 +94,6 @@ public class UserServiceImpl implements UserService {
                 throw new RuntimeException("Image not found in resources");
             }
 
-            // Send the email
             mailSender.send(message);
 
         } catch (MessagingException | IOException e) {
