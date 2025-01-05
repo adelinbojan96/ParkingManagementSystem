@@ -14,7 +14,7 @@ public class CorsConfig implements WebMvcConfigurer {
         System.out.println("Registering CORS configuration..."); // Debug message
         registry.addMapping("/**")
                 .allowedOrigins(
-                        "http://localhost:3000",
+                         "http://localhost:3000",
                         "http://localhost:8081",
                         "http://localhost:8080"
                 )

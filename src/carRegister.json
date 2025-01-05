@@ -1,0 +1,21 @@
+{
+  "title": "Register your car for the parking lot",
+  "fields": [
+    {
+      "label": "License Plate",
+      "name": "licensePlate",
+      "placeholder": "Enter your license plate"
+    },
+    {
+      "label": "Car Brand",
+      "name": "carBrand",
+      "placeholder": "Enter your car brand"
+    },
+    {
+      "label": "Color",
+      "name": "color",
+      "placeholder": "Enter your car's color"
+    }
+  ],
+  "buttonText": "Register Car"
+}

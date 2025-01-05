@@ -1,0 +1,72 @@
+.CarRegister {
+    text-align: center;
+    padding: 20px;
+    background-color: #282c34;
+    min-height: 100vh;
+    color: white;
+}
+
+.car-register-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    max-width: 300px;
+}
+
+label {
+    font-size: 1rem;
+    margin-bottom: 5px;
+    color: white;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.custom-button {
+    background-color: #3b4048;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.custom-button:hover {
+    background-color: #50555f;
+}
+
+.custom-button:active {
+    background-color: #282c34;
+}
+
+/* Updated Styles for the Parking Lot Image */
+.parking-lot-image-container {
+    margin-top: 20px;
+    /* Adds space between the form and the image */
+}
+
+.parking-lot-image {
+    width: 180px;
+    height: 180px;
+    object-fit: cover;
+    /* Ensures the image covers the area without distortion */
+    border-radius: 10px;
+    /* Optional: Adds rounded corners */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    /* Optional: Adds a subtle shadow */
+}

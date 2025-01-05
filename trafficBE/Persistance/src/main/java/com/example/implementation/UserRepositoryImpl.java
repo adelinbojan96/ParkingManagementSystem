@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Repository
 public class UserRepositoryImpl implements UserRepository {
@@ -29,7 +28,8 @@ public class UserRepositoryImpl implements UserRepository {
         try (
                 Connection connection = DriverManager.getConnection(connectionString, dbUsername, dbPassword);
                 PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO user(username, password) VALUES (?, ?)")
-        ) {
+        )
+        {
             if (!user.getUsername().equals(user.getUsername().toLowerCase())) {
                 throw new InvalidValueException("Username must be lowercase");
             }
@@ -57,11 +57,12 @@ public class UserRepositoryImpl implements UserRepository {
         try (
                 Connection connection = DriverManager.getConnection(connectionString, dbUsername, dbPassword);
                 PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM user")
-        ) {
+        )
+        {
             ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
+            while (resultSet.next())
                 users.add(toEntity(resultSet));
-            }
+
         } catch (SQLException e) {
             throw new RuntimeException("Database error: " + e.getMessage(), e);
         }
@@ -91,7 +92,8 @@ public class UserRepositoryImpl implements UserRepository {
         try (
                 Connection connection = DriverManager.getConnection(connectionString, dbUsername, dbPassword);
                 PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM user WHERE firstname LIKE ?")
-        ) {
+        )
+        {
             preparedStatement.setString(1, "%" + firstname + "%");
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
