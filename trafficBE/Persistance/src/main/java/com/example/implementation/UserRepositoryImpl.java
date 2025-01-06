@@ -27,7 +27,7 @@ public class UserRepositoryImpl implements UserRepository {
     public void save(User user) {
         try (
                 Connection connection = DriverManager.getConnection(connectionString, dbUsername, dbPassword);
-                PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO user(username, password) VALUES (?, ?)")
+                PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO user(username, password, email, create_time, phone) VALUES (?, ?, ?, ?, ?)")
         )
         {
             if (!user.getUsername().equals(user.getUsername().toLowerCase())) {
@@ -40,10 +40,17 @@ public class UserRepositoryImpl implements UserRepository {
 
             preparedStatement.setString(1, user.getUsername());
             preparedStatement.setString(2, user.getPassword());
+            preparedStatement.setString(3, user.getEmail());
+            preparedStatement.setTimestamp(4, user.getCreate_time());
+            preparedStatement.setString(5, user.getPhone());
 
             int rowsAffected = preparedStatement.executeUpdate();
             if (rowsAffected == 0) {
                 throw new RuntimeException("Failed to insert user.");
+            }
+            else
+            {
+                System.out.println("User successfully inserted");
             }
 
         } catch (SQLException e) {
@@ -107,8 +114,12 @@ public class UserRepositoryImpl implements UserRepository {
 
     private User toEntity(ResultSet resultSet) throws SQLException {
         User user = new User();
+        user.setId_user(resultSet.getInt("id_user"));
         user.setUsername(resultSet.getString("username"));
         user.setPassword(resultSet.getString("password"));
+        user.setEmail(resultSet.getString("email"));
+        user.setCreate_time(resultSet.getTimestamp("create_time"));
+        user.setPhone(resultSet.getString("phone"));
         return user;
     }
 }

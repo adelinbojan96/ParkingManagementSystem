@@ -12,5 +12,4 @@ public interface UserService {
     List<UserViewDto> getAllUsers();
     UserViewDto getByUsername(String username);
     List<UserViewDto> getUsersByFirstname(String firstname);
-    void sendMail(String mail);
 }

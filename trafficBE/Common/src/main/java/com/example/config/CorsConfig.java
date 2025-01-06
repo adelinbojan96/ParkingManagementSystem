@@ -12,16 +12,15 @@ public class CorsConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         System.out.println("Registering CORS configuration..."); // Debug message
-        registry.addMapping("/**")
+        registry.addMapping("/**") // Apply CORS to all endpoints
                 .allowedOrigins(
-                         "http://localhost:3000",
-                        "http://localhost:8081",
-                        "http://localhost:8080"
+                        "http://localhost:3000", // Frontend dev server
+                        "http://localhost:8081", // Alternate backend endpoint (if needed)
+                        "http://localhost:8080"  // Primary backend endpoint
                 )
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // HTTP methods allowed
                 .allowedHeaders("*")
-                .exposedHeaders("Access-Control-Allow-Origin")
+                .exposedHeaders("Access-Control-Allow-Origin", "Authorization")
                 .allowCredentials(true);
     }
 }
-

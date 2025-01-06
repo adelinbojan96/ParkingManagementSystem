@@ -3,6 +3,7 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+  align-items: center;
 }
 
 .custom-button {
@@ -10,10 +11,13 @@
   color: white;
   border: none;
   border-radius: 15px;
-  padding: 10px 20px;
+  padding: 15px 20px;
   font-size: 1rem;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  width: 95%;
+  max-width: 600px;
+  align-self: center;
 }
 
 .custom-button:hover {
@@ -50,6 +54,18 @@
   font-size: calc(10px + 2vmin);
   color: white;
 }
+.logout-link {
+  font-size: 0.9rem;
+  color: white;
+  margin-top: 15px;
+  cursor: pointer;
+  text-align: center;
+  transition: color 0.3s ease;
+}
+
+.logout-link:active span {
+  color: #61dafb;
+}
 
 @keyframes App-logo-spin {
   from {
@@ -60,6 +76,7 @@
     transform: rotate(360deg);
   }
 }
+
 .WelcomeScreen-header strong {
   font-size: 3rem;
   color: #ffffff;

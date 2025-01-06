@@ -1,3 +1,4 @@
+// WelcomeScreen.js
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './WelcomeScreen.css';
@@ -8,6 +9,7 @@ function WelcomeScreen() {
   const [user, setUser] = useState(null);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+
   useEffect(() => {
     axios
       .get('http://localhost:8081/users')
@@ -24,12 +26,17 @@ function WelcomeScreen() {
   }, []);
 
   const handleRegisterCar = () => {
-    navigate('/register');
+    navigate('/registerCar');
   };
 
   const handleViewParkingSpots = () => {
     alert('Fetching available parking spots...');
-    // Logic for viewing parking spots can be added here
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('currentUser');
+    setUser(null);
+    navigate('/login');
   };
 
   return (
@@ -42,7 +49,6 @@ function WelcomeScreen() {
               <strong>Welcome</strong>
               <br />
               To the Parking Lot Allocation Dashboard
-              
             </>
           ) : error ? (
             <span style={{ color: 'red' }}>{error}</span>
@@ -58,6 +64,9 @@ function WelcomeScreen() {
             See Parking Spots Available
           </button>
         </div>
+        <p className="logout-link" onClick={handleLogout}>
+          <span>Log out</span>
+        </p>
       </header>
     </div>
   );

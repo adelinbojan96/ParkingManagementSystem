@@ -9,6 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/users")
+@CrossOrigin(origins = "http://localhost:3000")
 public class UserController {
 
     private final UserService service;
@@ -37,8 +38,4 @@ public class UserController {
         return service.getUsersByFirstname(firstname);
     }
 
-    @PutMapping(path = "/sendmail")
-    public void sendMail(@RequestBody String mail) {
-        service.sendMail(mail);
-    }
 }

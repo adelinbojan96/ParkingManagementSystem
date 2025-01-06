@@ -24,8 +24,9 @@ public class SecurityConfig {
         return httpSecurity
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/users/**").permitAll() // Allow /users without auth
-                        .anyRequest().authenticated()) // Require auth for other requests
+                        .requestMatchers("/users/**").permitAll()
+                        .requestMatchers("/vehicles/**").permitAll()
+                        .anyRequest().authenticated())
                 .build();
     }
 }
